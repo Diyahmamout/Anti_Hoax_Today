@@ -1,6 +1,7 @@
 package com.diyahmmt.antihoaxtoday.Kategori;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import com.diyahmmt.antihoaxtoday.API.ApiService;
 import com.diyahmmt.antihoaxtoday.API.Server;
 import com.diyahmmt.antihoaxtoday.Adapter.AdapterNews;
 import com.diyahmmt.antihoaxtoday.BuildConfig;
+import com.diyahmmt.antihoaxtoday.MainActivity;
 import com.diyahmmt.antihoaxtoday.R;
 import com.diyahmmt.antihoaxtoday.Response.News;
 import com.diyahmmt.antihoaxtoday.Response.ResponseNews;
@@ -44,6 +46,10 @@ public class Health extends AppCompatActivity {
         news.setLayoutManager(new LinearLayoutManager(Health.this));
         news.setAdapter(adapterNews);
         update();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
     }
 
     public void update() {
@@ -81,5 +87,18 @@ public class Health extends AppCompatActivity {
     private void hideDialog() {
         if (loading.isShowing())
             loading.dismiss();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(Health.this, MainActivity.class);
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Health.this, MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -1,6 +1,7 @@
 package com.diyahmmt.antihoaxtoday.Kategori;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,6 +46,9 @@ public class Business extends AppCompatActivity {
         news.setLayoutManager(new LinearLayoutManager(Business.this));
         news.setAdapter(adapterNews);
         update();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     public void update() {
@@ -82,5 +86,18 @@ public class Business extends AppCompatActivity {
     private void hideDialog() {
         if (loading.isShowing())
             loading.dismiss();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(Business.this, MainActivity.class);
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Business.this, MainActivity.class);
+        startActivity(intent);
     }
 }

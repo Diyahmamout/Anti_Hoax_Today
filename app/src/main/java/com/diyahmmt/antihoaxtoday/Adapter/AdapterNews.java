@@ -66,6 +66,7 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder> {
                 } else {
                     iDetail.putExtra("authorNews", news.getAuthorNews());
                 }
+                iDetail.putExtra("sourceNews", news.getSourceNews());
                 context.startActivity(iDetail);
             }
         });

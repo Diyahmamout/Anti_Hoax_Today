@@ -17,17 +17,23 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".Kategori.Business" />
-        <activity android:name=".Kategori.Science" />
-        <activity android:name=".Kategori.Sports" />
-        <activity android:name=".Kategori.Technology" />
-        <activity android:name=".Kategori.Health" />
-        <activity android:name=".Kategori.Entertainment"></activity>
+        <activity android:name=".DetailActivity"
+            android:label="Detail Berita"/>
+        <activity android:name=".Kategori.Business"
+            android:label="Bisnis"/>
+        <activity android:name=".Kategori.Science"
+            android:label="Ilmu"/>
+        <activity android:name=".Kategori.Sports"
+            android:label="Olahraga"/>
+        <activity android:name=".Kategori.Technology"
+            android:label="Teknologi"/>
+        <activity android:name=".Kategori.Health"
+            android:label="Kesehatan"/>
+        <activity android:name=".Kategori.Entertainment"
+            android:label="Hiburan"/>
     </application>
 
 </manifest>
