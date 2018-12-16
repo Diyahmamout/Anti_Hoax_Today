@@ -1,0 +1,88 @@
+package com.diyahmmt.antihoaxtoday.Kategori;
+
+import android.app.ProgressDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
+
+import com.diyahmmt.antihoaxtoday.API.ApiService;
+import com.diyahmmt.antihoaxtoday.API.Server;
+import com.diyahmmt.antihoaxtoday.Adapter.AdapterNews;
+import com.diyahmmt.antihoaxtoday.BuildConfig;
+import com.diyahmmt.antihoaxtoday.R;
+import com.diyahmmt.antihoaxtoday.Response.News;
+import com.diyahmmt.antihoaxtoday.Response.ResponseNews;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class Entertainment extends AppCompatActivity {
+
+    private RecyclerView news;
+    private AdapterNews adapterNews;
+    List<News> list = new ArrayList<>();
+    final String category = "entertainment";
+    ProgressDialog loading;
+    ApiService api;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_entertainment);
+
+        news = findViewById(R.id.news);
+        api = Server.getApiService();
+        adapterNews = new AdapterNews(Entertainment.this, list);
+
+        news.setHasFixedSize(true);
+        news.setLayoutManager(new LinearLayoutManager(Entertainment.this));
+        news.setAdapter(adapterNews);
+        update();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    public void update() {
+        loading = new ProgressDialog(Entertainment.this);
+        loading.setCancelable(false);
+        loading.setMessage("Loading Data ...");
+        showDialog();
+        api.getListNews("id", category, BuildConfig.NEWS_API_TOKEN).enqueue(new Callback<ResponseNews>() {
+            @Override
+            public void onResponse(Call<ResponseNews> call, Response<ResponseNews> response) {
+                if (response.isSuccessful()) {
+                    hideDialog();
+                    list = response.body().getNewsList();
+                    news.setAdapter(new AdapterNews(Entertainment.this, list));
+                    adapterNews.notifyDataSetChanged();
+                } else {
+                    hideDialog();
+                    Toast.makeText(Entertainment.this, "Gagal mengambil data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseNews> call, Throwable t) {
+                hideDialog();
+                Toast.makeText(Entertainment.this, "Cek Koneksi Internet Anda !! ", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showDialog() {
+        if (!loading.isShowing())
+            loading.show();
+    }
+
+    private void hideDialog() {
+        if (loading.isShowing())
+            loading.dismiss();
+    }
+}
