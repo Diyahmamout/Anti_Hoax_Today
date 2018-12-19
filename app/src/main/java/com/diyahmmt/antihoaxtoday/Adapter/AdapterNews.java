@@ -87,7 +87,7 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder> {
 
             cardView = itemView.findViewById(R.id.cv);
             imageView = itemView.findViewById(R.id.gambar);
-            judul = itemView.findViewById(R.id.judul);
+            judul = itemView.findViewById(R.id.titleNews);
             tanggal = itemView.findViewById(R.id.tgl);
             //penulis = itemView.findViewById(R.id.penulis);
         }

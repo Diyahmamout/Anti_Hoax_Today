@@ -1,6 +1,7 @@
 package com.diyahmmt.antihoaxtoday;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -45,6 +46,11 @@ public class MainActivity extends AppCompatActivity
     List<News> list = new ArrayList<>();
     ProgressDialog loading;
     ApiService api;
+    private static long backPressed;
+    private static final int TIME_LIMIT = 1800;
+
+    private AlarmReceiver alarmReceiver;
+    private AppPreference appPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +77,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setupAlarm(this);
     }
 
     public void update() {
         loading = new ProgressDialog(MainActivity.this);
         loading.setCancelable(false);
         loading.setMessage("Loading Data ...");
-        showDialog();
+        //showDialog();
         api.getListAllNews("id", BuildConfig.NEWS_API_TOKEN).enqueue(new Callback<ResponseNews>() {
             @Override
             public void onResponse(Call<ResponseNews> call, Response<ResponseNews> response) {
@@ -116,7 +124,13 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (TIME_LIMIT + backPressed > System.currentTimeMillis()) {
+                // super.onBackPressed();
+                moveTaskToBack(true);
+            } else {
+                Toast.makeText(this, "Press back again to exit.", Toast.LENGTH_SHORT).show();
+            }
+            backPressed = System.currentTimeMillis();
         }
     }
 
@@ -127,20 +141,20 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+   // @Override
+    /*public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        //if (id == R.id.action_settings) {
+           // return true;
+        //}
 
         return super.onOptionsItemSelected(item);
-    }
+    } */
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -151,8 +165,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_beranda) {
             Intent beranda = new Intent(MainActivity.this, MainActivity.class);
             startActivity(beranda);
+            finish();
         } else if (id == R.id.nav_favorite) {
-
+            Intent favorite = new Intent(MainActivity.this, FavoriteActivity.class);
+            startActivity(favorite);
         } else if (id == R.id.nav_business) {
             Intent bisnis = new Intent(MainActivity.this, Business.class);
             startActivity(bisnis);
@@ -176,5 +192,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public void setupAlarm(Context context) {
+        appPreference = new AppPreference(context);
+        alarmReceiver = new AlarmReceiver();
+        appPreference.setRepeating("11:46", "Anti-Hoax Today is missing you!!" );
+        alarmReceiver.setRepeatingAlarm(context,
+                AlarmReceiver.ALARMREPEATING,
+                appPreference.getREPEATING_TIME(),
+                appPreference.getREPEATING_MESSAGE());
     }
 }

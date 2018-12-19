@@ -99,5 +99,6 @@ public class Business extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(Business.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

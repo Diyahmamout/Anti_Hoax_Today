@@ -46,6 +46,9 @@ public class Technology extends AppCompatActivity {
         news.setLayoutManager(new LinearLayoutManager(Technology.this));
         news.setAdapter(adapterNews);
         update();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     public void update() {
